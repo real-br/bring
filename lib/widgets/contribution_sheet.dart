@@ -88,39 +88,37 @@ class _ContributionSheetState extends State<ContributionSheet> {
                 ),
               ),
               const SizedBox(height: 10),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: unclaimed.map((need) {
-                  final selected = _selectedNeeds.contains(need.id);
-                  return FilterChip(
-                    label: Text(need.label),
-                    selected: selected,
-                    onSelected: (val) {
-                      setState(() {
-                        if (val) {
-                          _selectedNeeds.add(need.id);
-                        } else {
-                          _selectedNeeds.remove(need.id);
-                        }
-                      });
-                    },
-                    selectedColor: BringTheme.primary.withValues(alpha: 0.15),
-                    checkmarkColor: BringTheme.primary,
-                    labelStyle: TextStyle(
-                      color: selected ? BringTheme.primary : BringTheme.onSurface,
+              ...unclaimed.map((need) {
+                final selected = _selectedNeeds.contains(need.id);
+                return CheckboxListTile(
+                  value: selected,
+                  onChanged: (val) {
+                    setState(() {
+                      if (val == true) {
+                        _selectedNeeds.add(need.id);
+                      } else {
+                        _selectedNeeds.remove(need.id);
+                      }
+                    });
+                  },
+                  title: Text(
+                    need.label,
+                    style: TextStyle(
+                      fontSize: 14,
                       fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+                      color: selected ? BringTheme.primary : BringTheme.onSurface,
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      side: BorderSide(
-                        color: selected ? BringTheme.primary : BringTheme.outline.withValues(alpha: 0.3),
-                      ),
-                    ),
-                    backgroundColor: Colors.white,
-                  );
-                }).toList(),
-              ),
+                  ),
+                  activeColor: BringTheme.primary,
+                  checkboxShape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  controlAffinity: ListTileControlAffinity.leading,
+                  contentPadding: EdgeInsets.zero,
+                  dense: true,
+                  visualDensity: VisualDensity.compact,
+                );
+              }),
               const SizedBox(height: 20),
             ],
             // Creative suggestion

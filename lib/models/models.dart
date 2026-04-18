@@ -49,7 +49,7 @@ class Activity {
   final String description;
   final String image;
   final List<String> tags;
-  final List<String> attendeeAvatars;
+  final List<User> attendees;
   final User host;
   final int maxAttendees;
   final List<Need> needs;
@@ -64,7 +64,7 @@ class Activity {
     required this.description,
     required this.image,
     required this.tags,
-    required this.attendeeAvatars,
+    required this.attendees,
     required this.host,
     required this.maxAttendees,
     required this.needs,

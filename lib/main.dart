@@ -5,6 +5,7 @@ import 'screens/host_dashboard_screen.dart';
 import 'screens/chat_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/create_activity_screen.dart';
+import 'screens/subscription_screen.dart';
 import 'data/mock_data.dart';
 
 void main() {
@@ -137,9 +138,17 @@ class _BringHomeState extends State<BringHome> {
           ),
           Padding(
             padding: const EdgeInsets.only(right: 12),
-            child: CircleAvatar(
-              radius: 16,
-              backgroundImage: NetworkImage(currentUser.avatar),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const SubscriptionScreen()),
+                );
+              },
+              child: CircleAvatar(
+                radius: 16,
+                backgroundImage: NetworkImage(currentUser.avatar),
+              ),
             ),
           ),
         ],

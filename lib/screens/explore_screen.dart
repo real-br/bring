@@ -4,6 +4,7 @@ import '../data/mock_data.dart';
 import '../theme/app_theme.dart';
 import '../widgets/activity_card.dart';
 import '../widgets/contribution_sheet.dart';
+import '../widgets/attendee_preview_sheet.dart';
 
 class ExploreScreen extends StatefulWidget {
   const ExploreScreen({super.key});
@@ -37,6 +38,150 @@ class _ExploreScreenState extends State<ExploreScreen> {
       _dragX = 0;
       _dragY = 0;
     });
+  }
+
+  void _showActivityInfo(Activity activity) {
+    final contributions = mockContributions[activity.id] ?? {};
+    final spotsLeft = activity.maxAttendees - activity.attendees.length;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => Container(
+        padding: EdgeInsets.only(
+          left: 24,
+          right: 24,
+          top: 20,
+          bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+        ),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Handle
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: BringTheme.outline.withValues(alpha: 0.3),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              activity.title,
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+                color: BringTheme.onSurface,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              '${activity.date} · ${activity.time} · ${activity.location}',
+              style: TextStyle(
+                fontSize: 14,
+                color: BringTheme.onSurface.withValues(alpha: 0.6),
+              ),
+            ),
+            const SizedBox(height: 16),
+            // Spots available
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: spotsLeft > 0
+                    ? const Color(0xFF2E7D32).withValues(alpha: 0.08)
+                    : BringTheme.primary.withValues(alpha: 0.08),
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(
+                  color: spotsLeft > 0
+                      ? const Color(0xFF2E7D32).withValues(alpha: 0.2)
+                      : BringTheme.primary.withValues(alpha: 0.2),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    spotsLeft > 0 ? Icons.event_seat : Icons.event_busy,
+                    size: 20,
+                    color: spotsLeft > 0 ? const Color(0xFF2E7D32) : BringTheme.primary,
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    spotsLeft > 0
+                        ? '$spotsLeft spot${spotsLeft == 1 ? '' : 's'} left out of ${activity.maxAttendees}'
+                        : 'Event is full',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: spotsLeft > 0 ? const Color(0xFF2E7D32) : BringTheme.primary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            // Confirmed attendees
+            const Text(
+              'Who\'s coming',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: BringTheme.onSurface,
+              ),
+            ),
+            const SizedBox(height: 12),
+            // Host
+            _AttendeeRow(
+              user: activity.host,
+              contribution: 'Host',
+              isHost: true,
+              onTap: () {
+                Navigator.pop(context);
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (_) => AttendeePreviewSheet(
+                    user: activity.host,
+                    contribution: null,
+                    activityTitle: activity.title,
+                  ),
+                );
+              },
+            ),
+            // Attendees
+            ...activity.attendees.map((user) => _AttendeeRow(
+              user: user,
+              contribution: contributions[user.id],
+              isHost: false,
+              onTap: () {
+                Navigator.pop(context);
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (_) => AttendeePreviewSheet(
+                    user: user,
+                    contribution: contributions[user.id],
+                    activityTitle: activity.title,
+                  ),
+                );
+              },
+            )),
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
+    );
   }
 
   void _showContributionSheet(Activity activity) {
@@ -198,7 +343,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 _ActionButton(
                   icon: Icons.info_outline,
                   color: BringTheme.tertiary,
-                  onTap: () {},
+                  onTap: () => _showActivityInfo(_activities.last),
                   size: 56,
                 ),
               ],
@@ -241,6 +386,106 @@ class _ActionButton extends StatelessWidget {
           ],
         ),
         child: Icon(icon, color: color, size: size * 0.45),
+      ),
+    );
+  }
+}
+
+class _AttendeeRow extends StatelessWidget {
+  final User user;
+  final String? contribution;
+  final bool isHost;
+  final VoidCallback onTap;
+
+  const _AttendeeRow({
+    required this.user,
+    this.contribution,
+    required this.isHost,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: onTap,
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 20,
+              backgroundImage: NetworkImage(user.avatar),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        user.name,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                          color: BringTheme.onSurface,
+                        ),
+                      ),
+                      if (isHost) ...[
+                        const SizedBox(width: 6),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: BringTheme.secondary,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: const Text(
+                            'Host',
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                              color: BringTheme.onSurface,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                  const SizedBox(height: 2),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.volunteer_activism,
+                        size: 12,
+                        color: isHost
+                            ? BringTheme.onSurfaceVariant
+                            : BringTheme.primary,
+                      ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          isHost
+                              ? 'Organizing this event'
+                              : contribution ?? 'Not yet decided',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: BringTheme.onSurfaceVariant,
+                            fontStyle: (!isHost && contribution == null)
+                                ? FontStyle.italic
+                                : FontStyle.normal,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const Icon(Icons.chevron_right, size: 18, color: BringTheme.outline),
+          ],
+        ),
       ),
     );
   }

@@ -50,6 +50,24 @@ const mockUsers = [
 
 List<Activity> getMockActivities() => [
   Activity(
+    id: 'a2',
+    title: 'OpenClaw Show-Off Night',
+    date: 'Saturday',
+    time: '7:00 PM',
+    location: 'SoMa Loft',
+    description: 'Bring your wildest OpenClaw projects and demo them to the crew. Expect chaos, creativity, and way too much Monster Energy.',
+    image: 'https://picsum.photos/seed/openclaw/800/600',
+    tags: ['TRENDING', 'TECH'],
+    attendees: [mockUsers[0]],
+    host: mockUsers[1],
+    maxAttendees: 5,
+    needs: [
+      Need(id: 'n6', label: 'Monster Energy'),
+      Need(id: 'n7', label: 'AI Girlfriend'),
+      Need(id: 'n8', label: 'Projector'),
+    ],
+  ),
+  Activity(
     id: 'a1',
     title: 'Rooftop Movie Night',
     date: 'Friday',
@@ -58,7 +76,7 @@ List<Activity> getMockActivities() => [
     description: 'Experience cult classics under the stars with premium cocktails and local gourmet popcorn. Limited capacity.',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAR6RoG7HKgikAwDWuAZGK4rBW0dp0DU3KkfMnlk0CZGhFl2pZa4ypM8gvsH5W9pWcABoydBbBEM-QgD3aWQWfg3ODcYXjjY8VBrc7bt8Ou71h0xMJdq3edqM5Gn3HL-eP5BRnONwPK0KUADgVTM2SJIzEdL7SjPIRCg6wUZ1MnAvGmN_Fx-h2G1Fptl5EYwNf36lXogs-0CaMDU30444vtfx8ibR3v8Tjnn6iVr2iOefmQjhSRCZMq1LUGMdVCHhQAJrI5eBnvBVs',
     tags: ['POPULAR', 'MOVIE'],
-    attendeeAvatars: [mockUsers[0].avatar, mockUsers[1].avatar],
+    attendees: [mockUsers[0], mockUsers[1]],
     host: currentUser,
     maxAttendees: 5,
     needs: [
@@ -70,26 +88,6 @@ List<Activity> getMockActivities() => [
     ],
   ),
   Activity(
-    id: 'a2',
-    title: 'Italian Dinner Party',
-    date: 'Saturday',
-    time: '7:00 PM',
-    location: 'SoMa Loft',
-    description: 'A cozy evening of homemade Italian food, good wine, and great conversation. Theme: talk about history!',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC2XSnMVoSmNeP3bR-mgsgKV2J-peZiLfsXgoWn3QH8wI96VH6_lWRASo28S9z5y7VWvdsGL85MBgeRevOFXOWINdd_o7rhqtJeZ-TgVwdXSQRVvJh3US0aD1xfXM_896NlCCZPREd5HujmQ1iEyHuPlnH2w91_dHZA9X3jj22G9R-aoIhMWfQ1t_iNXlik0_Q9Ew7VcWvdB9__jCsDgaMbdjJxyFEDJevZhqoEXpO2-mok-C0w2MZObKYaWErbGLIIGZZERIe71do',
-    tags: ['TRENDING', 'DINNER'],
-    attendeeAvatars: [mockUsers[0].avatar],
-    host: mockUsers[1],
-    maxAttendees: 5,
-    needs: [
-      Need(id: 'n6', label: 'Appetizer'),
-      Need(id: 'n7', label: 'Main Dish'),
-      Need(id: 'n8', label: 'Dessert'),
-      Need(id: 'n9', label: 'Wine'),
-      Need(id: 'n10', label: 'Conversation Topic'),
-    ],
-  ),
-  Activity(
     id: 'a3',
     title: 'Sunset Yoga & Smoothies',
     date: 'Wednesday',
@@ -98,7 +96,7 @@ List<Activity> getMockActivities() => [
     description: 'Flow through dynamic sequences as the sun sets. Smoothies after!',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBLgMXCGmraQg_TrXnlcRLpwOAAF-5jVZWBZmknjc8Q4b85GP3l9KULLQV517EBmv1rhrngOo2O_bS10rLBk8B90OYp9t2JXdH4Xc_y-cONEYxYTKUYV8PYfJ8vpAXI0jkLCL9ysFJ0CHUH5_YQGb3wycJG9fxURNkj-3kQdUI3MJXBkGI2OjdOIWa4VVGppi1nzVx9V_A9cuv8v00AwtVWzmjlXFmWiitX9zoRgvcdGee6tMolTIfd1zFSlYxosje52j3LaDqzhlM',
     tags: ['OUTDOOR', 'YOGA'],
-    attendeeAvatars: [mockUsers[1].avatar],
+    attendees: [mockUsers[1]],
     host: mockUsers[0],
     maxAttendees: 8,
     needs: [
@@ -115,9 +113,9 @@ List<Activity> getMockActivities() => [
     time: '3:00 PM',
     location: 'Hayes Valley Cafe',
     description: 'Bring your favorite board games for an afternoon of strategy and fun. All levels welcome!',
-    image: 'https://picsum.photos/seed/boardgames/800/600',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC2XSnMVoSmNeP3bR-mgsgKV2J-peZiLfsXgoWn3QH8wI96VH6_lWRASo28S9z5y7VWvdsGL85MBgeRevOFXOWINdd_o7rhqtJeZ-TgVwdXSQRVvJh3US0aD1xfXM_896NlCCZPREd5HujmQ1iEyHuPlnH2w91_dHZA9X3jj22G9R-aoIhMWfQ1t_iNXlik0_Q9Ew7VcWvdB9__jCsDgaMbdjJxyFEDJevZhqoEXpO2-mok-C0w2MZObKYaWErbGLIIGZZERIe71do',
     tags: ['CASUAL', 'GAMES'],
-    attendeeAvatars: [mockUsers[0].avatar, mockUsers[2].avatar],
+    attendees: [mockUsers[0], mockUsers[2]],
     host: mockUsers[1],
     maxAttendees: 6,
     needs: [
@@ -151,6 +149,24 @@ List<JoinRequest> getMockRequests() => [
     selectedNeeds: ['Drinks'],
   ),
 ];
+
+// Maps activityId -> userId -> what they're bringing
+final Map<String, Map<String, String>> mockContributions = {
+  'a1': {
+    'u1': 'Authentic Movie Theater Popcorn',
+    'u2': 'Artisanal Sodas & Retro Candy',
+  },
+  'a2': {
+    'u1': 'A 6-pack of Monster and a wild demo',
+  },
+  'a3': {
+    'u2': 'Bluetooth speaker & chill playlist',
+  },
+  'a4': {
+    'u1': 'Settlers of Catan + snacks',
+    'u3': 'Card games & homemade cookies',
+  },
+};
 
 List<ChatMessage> getMockMessages() => [
   ChatMessage(

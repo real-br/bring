@@ -51,7 +51,7 @@ class _ChatDetailView extends StatelessWidget {
                       style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
                     ),
                     Text(
-                      '${activity.attendeeAvatars.length + 1} participants',
+                      '${activity.attendees.length + 1} participants',
                       style: const TextStyle(fontSize: 12, color: BringTheme.onSurfaceVariant),
                     ),
                   ],

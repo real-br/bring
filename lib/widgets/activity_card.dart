@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../models/models.dart';
 import '../theme/app_theme.dart';
+import '../data/mock_data.dart';
+import 'attendee_preview_sheet.dart';
 
 class ActivityCard extends StatelessWidget {
   final Activity activity;
@@ -127,15 +129,28 @@ class ActivityCard extends StatelessWidget {
                         style: const TextStyle(color: Colors.white70, fontSize: 13),
                       ),
                       const Spacer(),
-                      // Attendee avatars stacked
-                      SizedBox(
-                        width: 20.0 + (activity.attendeeAvatars.length * 18.0),
-                        height: 28,
-                        child: Stack(
-                          children: [
-                            for (var i = 0; i < activity.attendeeAvatars.length; i++)
-                              Positioned(
-                                left: i * 18.0,
+                      // Attendee avatars row
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          for (var i = 0; i < activity.attendees.length; i++)
+                            Padding(
+                              padding: EdgeInsets.only(left: i == 0 ? 0 : 4),
+                              child: GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: () {
+                                  final contribution = mockContributions[activity.id]?[activity.attendees[i].id];
+                                  showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    backgroundColor: Colors.transparent,
+                                    builder: (_) => AttendeePreviewSheet(
+                                      user: activity.attendees[i],
+                                      contribution: contribution,
+                                      activityTitle: activity.title,
+                                    ),
+                                  );
+                                },
                                 child: Container(
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
@@ -143,12 +158,12 @@ class ActivityCard extends StatelessWidget {
                                   ),
                                   child: CircleAvatar(
                                     radius: 12,
-                                    backgroundImage: NetworkImage(activity.attendeeAvatars[i]),
+                                    backgroundImage: NetworkImage(activity.attendees[i].avatar),
                                   ),
                                 ),
                               ),
-                          ],
-                        ),
+                            ),
+                        ],
                       ),
                     ],
                   ),
